@@ -1,0 +1,137 @@
+Drop DATABASE IF EXISTS sistema_experto_db;
+
+-- Crear la base de datos (sistema_experto_db)
+CREATE DATABASE IF NOT EXISTS sistema_experto_db;
+USE sistema_experto_db;
+
+-- Tabla para los padecimientos
+CREATE TABLE IF NOT EXISTS padecimientos (
+    codigo VARCHAR(50) PRIMARY KEY,
+    nombre VARCHAR(100),
+    descripcion TEXT
+);
+
+-- Tabla para los fármacos
+CREATE TABLE IF NOT EXISTS farmacos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    padecimiento_codigo VARCHAR(50),
+    categoria VARCHAR(20),  -- 'diabeticos' o 'hipertensos'
+    nombre VARCHAR(100),
+    dosis VARCHAR(100),
+    contraindicaciones VARCHAR(255),  -- Se pueden almacenar como cadena separada por comas
+    FOREIGN KEY (padecimiento_codigo) REFERENCES padecimientos(codigo)
+);
+
+-- Insertar registros de ejemplo
+INSERT INTO padecimientos (codigo, nombre, descripcion) VALUES
+  ('alergias', 'Alergias', 'Reacción exagerada del sistema inmunológico a sustancias como polen, ácaros o alimentos.'),
+  ('anemia', 'Anemia', 'Deficiencia de glóbulos rojos o hemoglobina, causando fatiga y debilidad.'),
+  ('artritis_reumatoide', 'Artritis Reumatoide', 'Enfermedad autoinmune que causa inflamación crónica en las articulaciones.'),
+  ('asma', 'Asma', 'Enfermedad crónica de las vías respiratorias que causa inflamación y estrechamiento de los bronquios.'), 
+  ('conjuntivitis', 'Conjuntivitis', 'Inflamación de la conjuntiva, causada por infecciones, alergias o irritantes.'),
+  ('depresion_y_ansiedad', 'Depresión y Ansiedad', 'Trastornos del estado de ánimo que afectan emociones, pensamientos y comportamiento.'),  
+  ('diabetes_tipo_2', 'Diabetes Tipo 2', 'Trastorno metabólico caracterizado por resistencia a la insulina y niveles altos de glucosa.'),
+  ('enfermedad_celiaca', 'Enfermedad Celíaca', 'Trastorno autoinmune desencadenado por el gluten, dañando el intestino delgado.'),
+  ('enfermedad_de_parkinson', 'Enfermedad de Parkinson', 'Trastorno neurodegenerativo que afecta el movimiento, causando temblores y rigidez.'),
+  ('reflujo_gastroesofagico', 'Reflujo Gastroesofágico', 'Retroceso del ácido estomacal hacia el esófago, causando acidez e irritación.'),
+  ('epoc', 'EPOC', 'Enfermedad pulmonar obstructiva crónica, generalmente causada por el tabaquismo.'),
+  ('enfermedades_autoinmunes', 'Enfermedades Autoinmunes', 'Trastornos donde el sistema inmunológico ataca células sanas del cuerpo.'),
+  ('epilepsia', 'Epilepsia', 'Trastorno neurológico caracterizado por convulsiones recurrentes.'),
+  ('esquizofrenia', 'Esquizofrenia', 'Trastorno mental que afecta la percepción de la realidad, con alucinaciones y delirios.'),
+  ('fibromialgia', 'Fibromialgia', 'Síndrome caracterizado por dolor musculoesquelético generalizado y fatiga.'),
+  ('gastroenteritis', 'Gastroenteritis', 'Inflamación del estómago e intestinos, causando diarrea, vómitos y dolor abdominal.'),
+  ('hepatitis_viral', 'Hepatitis Viral', 'Inflamación del hígado causada por virus (A, B, C, etc.), con posibles complicaciones graves.'),  
+  ('hipertension_arterial', 'Hipertensión Arterial', 'Presión arterial elevada de manera crónica, factor de riesgo cardiovascular.'),
+  ('hipertiroidismo', 'Hipertiroidismo', 'Exceso de producción de hormonas tiroideas, acelerando el metabolismo.'),
+  ('hipotiroidismo', 'Hipotiroidismo', 'Deficiencia de hormonas tiroideas, ralentizando el metabolismo y causando fatiga.'),
+  ('infeccion_urinaria', 'Infección Urinaria', 'Infección bacteriana en el tracto urinario, causando dolor al orinar y urgencia.'),
+  ('insuficiencia_cardiaca', 'Insuficiencia Cardíaca', 'Incapacidad del corazón para bombear sangre eficientemente.'),
+  ('insuficiencia_renal_cronica', 'Insuficiencia Renal Crónica', 'Pérdida progresiva de la función renal, requiriendo diálisis o trasplante.'),
+  ('migrana', 'Migraña', 'Dolor de cabeza intenso, pulsátil, acompañado de náuseas y sensibilidad a la luz.'),
+  ('osteoporosis', 'Osteoporosis', 'Enfermedad que debilita los huesos, aumentando el riesgo de fracturas.'),   
+  ('psoriasis', 'Psoriasis', 'Enfermedad autoinmune de la piel, causando placas rojas y escamosas.'),
+  ('resfriado_y_gripe', 'Resfriado y Gripe', 'Infecciones virales respiratorias, con síntomas como congestión, fiebre y malestar general.'), 
+  ('sindrome_intestino_irritable', 'Síndrome del Intestino Irritable', 'Trastorno digestivo funcional con dolor abdominal, diarrea o estreñimiento.');
+
+INSERT INTO farmacos (padecimiento_codigo, categoria, nombre, dosis, contraindicaciones)
+VALUES 
+('alergias', 'diabeticos', 'Loratadina', '10 mg diarios', 'alérgicos a loratadina o antihistamínicos similares'),
+('alergias', 'hipertensos', 'Cetirizina', '10 mg diarios', 'alérgicos a cetirizina, hidroxicina o con insuficiencia renal grave'),
+('alergias', 'diabeticos', 'Antihistamínicos tópicos', 'Aplicar según necesidad', 'alérgicos al principio activo o con heridas abiertas'),
+('anemia', 'diabeticos', 'Suplementos de hierro', 'Dosis según prescripción médica', 'pacientes con hemocromatosis o sobrecarga de hierro'),
+('anemia', 'hipertensos', 'Ácido fólico', 'Dosis según prescripción médica', 'anemias no diagnosticadas (puede enmascarar B12)'),
+('anemia', 'diabeticos', 'Vitamina B12', 'Dosis según prescripción médica', 'alérgicos a cobalaminas'),
+('artritis_reumatoide', 'hipertensos', 'Metotrexato', 'Dosis según prescripción médica', 'embarazo, lactancia, insuficiencia hepática/renal grave o alcoholismo'),
+('artritis_reumatoide', 'diabeticos', 'Ibuprofeno', '200-400 mg cada 6 horas', 'alérgicos a AINEs, úlcera gástrica, insuficiencia renal/hepática grave'),
+('artritis_reumatoide', 'hipertensos', 'Corticoides', 'Dosis según prescripción médica', 'infecciones no controladas, alergia, vacunas con virus vivos'),
+('asma', 'diabeticos', 'Salbutamol', 'Dosis según prescripción médica', 'alérgicos al fármaco o taquiarritmias graves'),
+('asma', 'hipertensos', 'Budesonida', 'Dosis según prescripción médica', 'infecciones fúngicas orales no tratadas (riesgo de candidiasis)'),
+('asma', 'diabeticos', 'Montelukast', 'Dosis según prescripción médica', 'alérgicos al principio activo'),
+('conjuntivitis', 'hipertensos', 'Tobramicina', 'Dosis según prescripción médica', 'alérgicos a aminoglucósidos, insuficiencia renal'),
+('conjuntivitis', 'diabeticos', 'Ciprofloxacino', '250-500 mg cada 12 horas', 'menores de 18 años, mujeres embarazadas y personas con antecedentes de tendinitis'),
+('conjuntivitis', 'hipertensos', 'Lágrimas artificiales', 'Aplicar según necesidad', 'alérgicos a conservantes presentes en algunas formulaciones'),
+('depresion_y_ansiedad', 'diabeticos', 'Fluoxetina', 'Dosis según prescripción médica', 'uso con IMAOs, alergia a ISRS, riesgo de suicidio en jóvenes'),
+('depresion_y_ansiedad', 'hipertensos', 'Sertralina', 'Dosis según prescripción médica', 'similar a fluoxetina (alergia, IMAOs)'),
+('depresion_y_ansiedad', 'diabeticos', 'Escitalopram', 'Dosis según prescripción médica', 'alergia a ISRS, combinación con IMAOs'),
+('diabetes_tipo_2', 'diabeticos', 'Metformina', '500-2000 mg diarios', 'insuficiencia renal grave, acidosis láctica previa'),
+('diabetes_tipo_2', 'hipertensos', 'Insulina', 'Dosis según prescripción médica', 'hipoglucemias graves no controladas'),
+('diabetes_tipo_2', 'diabeticos', 'Sulfonilureas', 'Dosis según prescripción médica', 'alergia a sulfas, insuficiencia hepática/renal grave'),
+('enfermedad_celiaca', 'diabeticos', 'Dieta libre de gluten', 'No aplica', 'Ninguna'),
+('enfermedad_de_parkinson', 'hipertensos', 'Levodopa', 'Dosis según prescripción médica', 'glaucoma de ángulo cerrado o antecedentes de psicosis'),
+('enfermedad_de_parkinson', 'diabeticos', 'Carbidopa', 'Dosis según prescripción médica', 'glaucoma de ángulo estrecho, melanoma maligno'),
+('enfermedad_de_parkinson', 'hipertensos', 'Pramipexol', 'Dosis según prescripción médica', 'alergia, hipotensión grave no controlada'),
+('reflujo_gastroesofagico', 'diabeticos', 'Omeprazol', '20-40 mg diarios', 'alergia a inhibidores de bomba de protones (IBP)'),
+('reflujo_gastroesofagico', 'hipertensos', 'Ranitidina', 'Dosis según prescripción médica', 'alergia a antagonistas H2 (aunque retirada en muchos países por seguridad)'),
+('reflujo_gastroesofagico', 'diabeticos', 'Esomeprazol', '20-40 mg diarios', 'alergia a IBP'),
+('epoc', 'hipertensos', 'Tiotropio', 'Dosis según prescripción médica', 'glaucoma de ángulo estrecho, alergia a anticolinérgicos'),
+('epoc', 'diabeticos', 'Salmeterol', 'Dosis según prescripción médica', 'alergia a agonistas β2, taquiarritmias graves'),
+('epoc', 'hipertensos', 'Corticoides inhalados', 'Dosis según prescripción médica', 'infecciones fúngicas orales no tratadas'),
+('enfermedades_autoinmunes', 'diabeticos', 'Azatioprina', 'Dosis según prescripción médica', 'alergia, embarazo, insuficiencia hepática grave'),
+('enfermedades_autoinmunes', 'hipertensos', 'Ciclosporina', 'Dosis según prescripción médica', 'insuficiencia renal/hepática grave, hipertensión no controlada'),
+('enfermedades_autoinmunes', 'diabeticos', 'Corticoides', 'Dosis según prescripción médica', 'infecciones no controladas, alergia, vacunas con virus vivos'),
+('epilepsia', 'hipertensos', 'Carbamazepina', 'Dosis según prescripción médica', 'alergia, porfiria, uso con IMAOs'),
+('epilepsia', 'diabeticos', 'Ácido valproico', 'Dosis según prescripción médica', 'enfermedad hepática, embarazo (riesgo teratogénico)'),
+('epilepsia', 'hipertensos', 'Levetiracetam', 'Dosis según prescripción médica', 'alergia al fármaco'),
+('esquizofrenia', 'diabeticos', 'Risperidona', 'Dosis según prescripción médica', 'demencia con psicosis (aumenta mortalidad en ancianos), alergia'),
+('esquizofrenia', 'hipertensos', 'Olanzapina', 'Dosis según prescripción médica', 'riesgo metabólico alto'),
+('fibromialgia', 'diabeticos', 'Pregabalina', 'Dosis según prescripción médica', 'alergia, insuficiencia cardiaca grave'),
+('fibromialgia', 'hipertensos', 'Duloxetina', 'Dosis según prescripción médica', 'glaucoma, alergia a ISRN'),
+('fibromialgia', 'diabeticos', 'Terapia física', 'No aplica', 'Ninguna'),
+('gastroenteritis', 'hipertensos', 'Loperamida', 'Dosis según prescripción médica', 'diarrea infecciosa grave (ej. C. difficile), alergia'),
+('gastroenteritis', 'diabeticos', 'Sales de rehidratación oral', 'Dosis según prescripción médica', 'sin contraindicaciones (excepto intolerancia a componentes)'),
+('gastroenteritis', 'hipertensos', 'Probióticos', 'Dosis según prescripción médica', 'inmunosuprimidos (riesgo de infección)'),
+('hepatitis_viral', 'diabeticos', 'Interferón', 'Dosis según prescripción médica', 'enfermedad autoinmune grave, depresión no controlada'),
+('hepatitis_viral', 'hipertensos', 'Entecavir', 'Dosis según prescripción médica', 'alergia, insuficiencia renal grave (ajustar dosis)'),
+('hepatitis_viral', 'diabeticos', 'Tenofovir', 'Dosis según prescripción médica', 'alergia, insuficiencia renal grave (ajustar dosis)'),
+('hipertension_arterial', 'hipertensos', 'Losartán', 'Dosis según prescripción médica', 'embarazo, alergia a ARA-II'),
+('hipertension_arterial', 'diabeticos', 'Enalapril', '5-40 mg diarios', 'embarazo, angioedema previo con IECAs'),
+('hipertension_arterial', 'hipertensos', 'Amlodipino', '5-10 mg diarios', 'alergia a dihidropiridinas, hipotensión grave'),
+('hipertiroidismo', 'diabeticos', 'Metimazol', 'Dosis según prescripción médica', 'alergia, lactancia (PTU preferido si es necesario)'),
+('hipertiroidismo', 'hipertensos', 'Propiltiouracilo', 'Dosis según prescripción médica', 'alergia, lactancia'),
+('hipotiroidismo', 'diabeticos', 'Levotiroxina', 'Dosis según prescripción médica', 'infarto agudo de miocardio reciente, tirotoxicosis no tratada'),
+('infeccion_urinaria', 'hipertensos', 'Nitrofurantoína', 'Dosis según prescripción médica', 'insuficiencia renal grave, alergia, embarazo (en 3er trimestre)'),
+('infeccion_urinaria', 'diabeticos', 'Ciprofloxacino', '250-500 mg cada 12 horas', 'alérgicos a quinolonas, niños/adolescentes, embarazo'),
+('infeccion_urinaria', 'hipertensos', 'Amoxicilina', '500 mg cada 8 horas', 'alergia a penicilinas, mononucleosis (erupción)'),
+('insuficiencia_cardiaca', 'diabeticos', 'Furosemida', 'Dosis según prescripción médica', 'alergia a sulfamidas, deshidratación grave'),
+('insuficiencia_cardiaca', 'hipertensos', 'Espironolactona', 'Dosis según prescripción médica', 'insuficiencia renal grave, hiperkalemia'),
+('insuficiencia_cardiaca', 'diabeticos', 'Digoxina', 'Dosis según prescripción médica', 'arritmias ventriculares, intoxicación previa por digoxina'),
+('insuficiencia_renal_cronica', 'hipertensos', 'Diálisis', 'No aplica', 'hipotensión incontrolable'),
+('insuficiencia_renal_cronica', 'diabeticos', 'Eritropoyetina', 'Dosis según prescripción médica', 'hipertensión no controlada, alergia'),
+('insuficiencia_renal_cronica', 'hipertensos', 'Antihipertensivos', 'Dosis según tipo', 'β-bloqueadores en asma grave'),
+('migrana', 'diabeticos', 'Sumatriptán', 'Dosis según prescripción médica', 'enfermedad cardiovascular grave, alergia a triptanes'),
+('migrana', 'hipertensos', 'Ibuprofeno', '200-400 mg cada 6 horas', 'alérgicos a AINEs, úlcera gástrica, insuficiencia renal/hepática grave'),
+('migrana', 'diabeticos', 'Paracetamol', '500-1000 mg cada 6 horas', 'enfermedad hepática grave, alcoholismo crónico'),
+('osteoporosis', 'hipertensos', 'Alendronato', '70 mg semanal', 'trastornos esofágicos, insuficiencia renal grave'),
+('osteoporosis', 'diabeticos', 'Calcio', 'Dosis según prescripción médica', 'hipercalcemia'),
+('osteoporosis', 'hipertensos', 'Vitamina D', 'Dosis según prescripción médica', 'hipervitaminosis D'),
+('psoriasis', 'diabeticos', 'Corticoides tópicos', 'Aplicar según necesidad', 'infecciones cutáneas no tratadas (ej. herpes)'),
+('psoriasis', 'hipertensos', 'Fototerapia', 'Dosis según prescripción médica', 'lupus, fotosensibilidad'),
+('psoriasis', 'diabeticos', 'Inmunosupresores', 'Dosis según prescripción médica', 'infecciones activas no controladas'),
+('resfriado_y_gripe', 'hipertensos', 'Paracetamol', '500-1000 mg cada 6 horas', 'enfermedad hepática grave, alcoholismo crónico'),
+('resfriado_y_gripe', 'diabeticos', 'Ibuprofeno', '200-400 mg cada 6 horas', 'alérgicos a AINEs, úlcera gástrica, insuficiencia renal/hepática grave'),
+('resfriado_y_gripe', 'hipertensos', 'Antihistamínicos', 'Dosis según prescripción médica', 'glaucoma de ángulo estrecho, alergia'),
+('resfriado_y_gripe', 'diabeticos', 'Descongestionantes', 'Dosis según prescripción médica', 'hipertensión no controlada, glaucoma'),
+('sindrome_intestino_irritable', 'hipertensos', 'Antiespasmódicos', 'Dosis según prescripción médica', 'glaucoma de ángulo estrecho, alergia'),
+('sindrome_intestino_irritable', 'diabeticos', 'Probióticos', 'Dosis según prescripción médica', 'inmunosuprimidos (riesgo de infección)'),
+('sindrome_intestino_irritable', 'hipertensos', 'Dieta controlada', 'No aplica', 'Ninguna');
+
